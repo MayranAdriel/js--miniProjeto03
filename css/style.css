@@ -10,6 +10,25 @@
 /* ==========================================================================
    Base styles: opinionated defaults
    ========================================================================== */
+   
+   body {
+    padding: 20px;
+}
+
+.series-container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.series-card {
+    width: 18rem;
+    margin: 15px;
+}
+
+.series-img {
+    height: 300px;
+    object-fit: cover;
+}
 
 html {
   color: #222;
