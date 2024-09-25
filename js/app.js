@@ -1,61 +1,91 @@
-let paginaAtual = 1;
-let limiteAtual = 10;
 
-document.getElementById('botaoBuscar').addEventListener('click', function () {
-    const titulo = document.getElementById('campoBusca').value;
-    paginaAtual = 1;
-    buscarSeries(titulo, paginaAtual, limiteAtual);
-});
+let input = document.querySelector("input");
+let select = document.querySelector("#opcoesPaginacao");
+let series = document.querySelector(".series");
+let botaoProximo = document.querySelector(".botoes #botaoProximo");
+let botaoAnterior = document.querySelector(".botoes #botaoAnterior");
+let numeroPaginaHtml = document.querySelector(".botoes p");
+let limitePagina = 10;
+let numeroPagina = 1;
 
-document.getElementById('seletorLimite').addEventListener('change', function () {
-    limiteAtual = this.value;
-    const titulo = document.getElementById('campoBusca').value;
-    buscarSeries(titulo, paginaAtual, limiteAtual);
-});
+addEventListener("DOMContentLoaded", imprimeSeries);
 
-document.getElementById('botaoPaginaAnterior').addEventListener('click', function () {
-    if (paginaAtual > 1) {
-        paginaAtual--;
-        const titulo = document.getElementById('campoBusca').value;
-        buscarSeries(titulo, paginaAtual, limiteAtual);
-    }
-});
+botaoProximo.addEventListener("click", aumentaPagina);
+botaoAnterior.addEventListener("click", diminuiPagina);
+select.addEventListener("change", trocaLimitePagina)
 
-document.getElementById('botaoProximaPagina').addEventListener('click', function () {
-    paginaAtual++;
-    const titulo = document.getElementById('campoBusca').value;
-    buscarSeries(titulo, paginaAtual, limiteAtual);
-});
-
-function buscarSeries(titulo, pagina, limite) {
-    fetch(`http://localhost:3000/series?titulo=${titulo}&pagina=${pagina}&limite=${limite}`)
-        .then(response => response.json())
-        .then(dados => {
-            exibirSeries(dados.series);
-            document.getElementById('paginaAtual').innerText = paginaAtual;
-        })
-        .catch(erro => {
-            console.error('Erro ao buscar séries:', erro);
-        });
+function trocaLimitePagina() {
+  let opcao = select.value;
+  if (opcao.includes('10')){
+    limitePagina = 10;
+    imprimeSeries();
+  } else if(opcao.includes('15')){
+    limitePagina = 15;
+    imprimeSeries();
+  } else if(opcao.includes('20')){
+    limitePagina = 20;
+    imprimeSeries();
+  }
+  console.log(opcao);
 }
 
-function exibirSeries(series) {
-    const container = document.getElementById('containerSeries');
-    container.innerHTML = ''; // Limpar a exibição anterior
+function rolaProComeco() {
+  window.scrollTo({
+    behavior: "smooth",
+    top: 0
+  })
+}
 
-    series.forEach(serie => {
-        const seriesCard = `
-            <div class="col-md-3 series-card">
-                <div class="card">
-                    <img src="${serie.poster}" class="card-img-top series-img" alt="${serie.titulo}">
-                    <div class="card-body">
-                        <h5 class="card-title">${serie.titulo}</h5>
-                        <p class="card-text">Ano: ${serie.ano}</p>
-                        <p class="card-text">Gênero: ${serie.genero}</p>
-                    </div>
-                </div>
+
+function aumentaPagina() {
+  numeroPagina++;
+  numeroPaginaHtml.textContent = numeroPagina;
+  imprimeSeries(numeroPagina, limitePagina);
+  rolaProComeco();
+}
+
+function diminuiPagina() {
+  if(numeroPagina > 1){
+    numeroPagina--;
+    numeroPaginaHtml.textContent = numeroPagina;
+    imprimeSeries(numeroPagina, limitePagina);
+    rolaProComeco();
+  }
+}
+
+
+async function imprimeSeries() {
+  let dados = await buscarObjetoPaginaLimite(numeroPagina, limitePagina);
+  let dadosHTML = '';
+  dados.forEach((dadoAtual) => {
+    dadosHTML += `
+    <div class="serie-box">
+            <h3>${dadoAtual.titulo}</h3>
+            <div class="img-box">
+              <img src="${dadoAtual.imagem}" alt="${dadoAtual.titulo}">
             </div>
-        `;
-        container.insertAdjacentHTML('beforeend', seriesCard);
-    });
+            <div class="conteudo">
+              <div class="descricao">
+              ${dadoAtual.resumo}
+              </div>
+              <div class="generos">
+
+              </div>
+            </div>
+          </div>`
+    series.innerHTML = dadosHTML;
+  })
+}
+
+
+async function buscarObjetoPaginaLimite(pagina, limite) {
+  let resposta = await fetch(`http://localhost:3000/series?pagina=${pagina}&limite=${limite}`);
+  let json = await resposta.json();
+  return json.data;
+}
+
+async function buscarObjetoTitulo(titulo) {
+  let resposta = await fetch(`http://localhost:3000/series?titulo=${titulo}`);
+  let json = await resposta.json();
+  return json.data;
 }
