@@ -1,105 +1,127 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  overflow-x: hidden;
+  font-family: 'Roboto', sans-serif;
 }
 
 body {
+  background-color: #141414; /* Cor de fundo escura */
+  color: #ffffff; /* Texto claro */
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   padding: 20px;
-  background-color: gray;
-  margin: auto;
 }
 
-.titulo {
-  font-size: 1.5rem;
-  margin-bottom: 2rem;
+header {
+  width: 100%;
+  padding: 20px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #000; /* Fundo do header */
+  position: sticky; /* Fixa o header no topo */
+  top: 0;
+  z-index: 1000; /* Mantém o header acima de outros elementos */
 }
 
-.catalogo {
-  margin-bottom: 2rem;
+header .logo {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #e50914; /* Cor da logo */
 }
 
-#opcoesPaginacao {
-  padding: 0.5rem;
-  border-radius: 1rem;
-  outline-color: yellow;
+header .pesquisa {
+  display: flex;
+  align-items: center;
 }
 
+header input[type="text"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  width: 300px;
+  margin-right: 10px;
+}
 
-input {
-  text-align: center;
-  font-size: 1.2rem;
-  padding: 1rem;
-  width: 40vw;
-  border-radius: 2rem;
+header select {
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  background-color: #333;
+  color: #fff;
 }
 
 main {
-  margin-top: 2rem;
+  width: 100%;
+  margin-top: 20px;
 }
 
-input:focus {
-  outline-color: yellow;
+.catalogo {
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .series {
-  border: red;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-column-gap: 5px;
-  grid-row-gap: 5px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsividade */
+  gap: 15px;
+}
+
+.img-box {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  transition: transform 0.3s;
 }
 
 .img-box img {
-  height: 300px;
-  width: 200px;
-  border-radius: 0.5rem;
-  object-fit: cover;
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  transition: transform 0.3s;
+}
+
+.img-box:hover {
+  transform: scale(1.05); /* Efeito de zoom ao passar o mouse */
+}
+
+footer {
+  margin-top: auto;
+  padding: 20px 0;
 }
 
 footer .botoes {
   display: flex;
   justify-content: center;
-  align-content: center;
-  text-align: center;
-  flex-direction: row;
-  gap: 5px;
+  gap: 15px;
 }
 
-.botoes #botaoAnterior, .botoes #botaoProximo {
-  padding: 1rem;
-  font-size: 1.1rem;
-  border-radius: 2rem;
+footer .botoes button {
+  padding: 10px 20px;
   border: none;
-  color: aquamarine;
-  background-color: black;
+  border-radius: 5px;
+  background-color: #e50914; /* Vermelho Netflix */
+  color: white;
   cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+footer .botoes button:hover {
+  background-color: #f40612; /* Tom mais escuro */
 }
 
 .botoes p {
-  font-size: 1.1rem;
-  text-align: center;
-  margin-top: 15px;
-}
-
-.botoes {
-  padding: 1rem;
+  margin-top: 10px;
 }
 
 .pesquisa {
   display: flex;
   align-items: center;
-  justify-content: space-around;
-  width: 100vw;
+  justify-content: center;
+  width: 100%;
 }
-
