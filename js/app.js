@@ -12,43 +12,46 @@ addEventListener("DOMContentLoaded", imprimeSeries);
 
 botaoProximo.addEventListener("click", aumentaPagina);
 botaoAnterior.addEventListener("click", diminuiPagina);
-select.addEventListener("change", trocaLimitePagina)
+select.addEventListener("change", trocaLimitePagina);
 
-function trocaLimitePagina() {
+async function trocaLimitePagina() {
   let opcao = select.value;
   if (opcao.includes('10')){
     limitePagina = 10;
-    imprimeSeries();
+    await imprimeSeries();
   } else if(opcao.includes('15')){
     limitePagina = 15;
-    imprimeSeries();
+    await imprimeSeries();
   } else if(opcao.includes('20')){
     limitePagina = 20;
-    imprimeSeries();
+    await imprimeSeries();
   }
   console.log(opcao);
 }
 
 function rolaProComeco() {
-  window.scrollTo({
-    behavior: "smooth",
-    top: 0
+  setTimeout(() => {
+    window.scrollTo({
+      behavior: "smooth",
+      top: 0
+    }, 100);
   })
 }
 
 
-function aumentaPagina() {
+async function aumentaPagina() {
   numeroPagina++;
   numeroPaginaHtml.textContent = numeroPagina;
-  imprimeSeries(numeroPagina, limitePagina);
+  await imprimeSeries(numeroPagina, limitePagina);
   rolaProComeco();
+
 }
 
-function diminuiPagina() {
+async function diminuiPagina() {
   if(numeroPagina > 1){
     numeroPagina--;
     numeroPaginaHtml.textContent = numeroPagina;
-    imprimeSeries(numeroPagina, limitePagina);
+    await imprimeSeries(numeroPagina, limitePagina);
     rolaProComeco();
   }
 }
@@ -78,6 +81,8 @@ async function imprimeSeries() {
 }
 
 
+
+
 async function buscarObjetoPaginaLimite(pagina, limite) {
   let resposta = await fetch(`http://localhost:3000/series?pagina=${pagina}&limite=${limite}`);
   let json = await resposta.json();
@@ -87,5 +92,6 @@ async function buscarObjetoPaginaLimite(pagina, limite) {
 async function buscarObjetoTitulo(titulo) {
   let resposta = await fetch(`http://localhost:3000/series?titulo=${titulo}`);
   let json = await resposta.json();
-  return json.data;
+  console.log(json.data)
+  console.log(titulo)
 }
